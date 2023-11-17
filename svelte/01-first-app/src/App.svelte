@@ -1,54 +1,53 @@
 <script>
-	import ContactCard from './ContactCard.svelte';
+  import ContactCard from "./ContactCard.svelte";
 
-	export let name;
-	let age = 37;
-	let userImage = 'https://avatars.githubusercontent.com/u/1913320?s=48&v=4';
-	let jobTitle = 'Senior Developer';
-	let description = '<strong>Lorem ipsum</strong> set dolor et unam per dolores.';
+  let name = "Max";
+  let title = "";
+  let image = "";
+  let description = "";
+	let formState = 'empty';
 
-	$: uppercaseName = name.toUpperCase();
-
-	$: console.log(name);
-
-	$: if (name.toLowerCase().startsWith('d')) {
-		age = 10;
-	}
-
-	function incrementAge() {
-		age = age + 1;
-	}
-
-	function changeName() {
-		name = name.split('').reverse().join('');
-	}
-
-	function nameInput(event) {
-		name = event.target.value;
+	function addContact() {
+		if (name.trim().length == 0 || title.trim().length == 0 || image.trim().length == 0 || description.trim().length == 0) {
+			formState = 'invalid';
+			return;
+		}
+		formState = 'done';
 	}
 </script>
 
 <style>
-	h1 {
-		color: purple;
-	}
+  #form {
+    width: 30rem;
+    max-width: 100%;
+  }
 </style>
 
-<h1>I'm {uppercaseName}, my age is {age}!</h1>
+<div id="form">
+  <div class="form-control">
+    <label for="userName">User Name</label>
+    <input type="text" bind:value={name} id="userName" />
+  </div>
+  <div class="form-control">
+    <label for="jobTitle">Job Title</label>
+    <input type="text" bind:value={title} id="jobTitle" />
+  </div>
+  <div class="form-control">
+    <label for="image">Image URL</label>
+    <input type="text" bind:value={image} id="image" />
+  </div>
+  <div class="form-control">
+    <label for="desc">Description</label>
+    <textarea rows="3" bind:value={description} id="desc" />
+  </div>
+</div>
 
-<button on:click={incrementAge}>Change Age</button>
-<button on:click={changeName}>Change Name</button>
+<button on:click={addContact}>Add Contact Card</button>
 
-<!-- <input type="text" value={name} on:input={nameInput} /> -->
-
-<input type="text" bind:value={name} />
-<input type="text" bind:value={jobTitle} />
-<input type="text" bind:value={userImage} />
-<textarea rows="3" bind:value={description} />
-
-<ContactCard
-	userName={name}
-	{jobTitle}
-	{userImage}
-	{description}
-/>
+{#if formState == 'done'}
+	<ContactCard userName={name} jobTitle={title} {description} userImage={image} />
+{:else if formState == 'invalid'}
+	<p>Invalid input.</p>
+{:else}
+	<p>PLease enter some data and hit the button!</p>
+{/if}
