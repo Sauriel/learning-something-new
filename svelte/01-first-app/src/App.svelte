@@ -1,6 +1,11 @@
 <script>
+	import ContactCard from './ContactCard.svelte';
+
 	export let name;
-	let age = 30;
+	let age = 37;
+	let userImage = 'https://avatars.githubusercontent.com/u/1913320?s=48&v=4';
+	let jobTitle = 'Senior Developer';
+	let description = '<strong>Lorem ipsum</strong> set dolor et unam per dolores.';
 
 	$: uppercaseName = name.toUpperCase();
 
@@ -29,8 +34,21 @@
 	}
 </style>
 
-<h1>Hello {uppercaseName}, my age is {age}!</h1>
+<h1>I'm {uppercaseName}, my age is {age}!</h1>
+
 <button on:click={incrementAge}>Change Age</button>
 <button on:click={changeName}>Change Name</button>
-<input type="text" value={name} on:input={nameInput} />
+
+<!-- <input type="text" value={name} on:input={nameInput} /> -->
+
 <input type="text" bind:value={name} />
+<input type="text" bind:value={jobTitle} />
+<input type="text" bind:value={userImage} />
+<textarea rows="3" bind:value={description} />
+
+<ContactCard
+	userName={name}
+	{jobTitle}
+	{userImage}
+	{description}
+/>
