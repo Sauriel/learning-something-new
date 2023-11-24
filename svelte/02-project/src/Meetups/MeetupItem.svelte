@@ -85,12 +85,10 @@
       caption="Contact"
     />
     <Button
-      type="button"
       caption="Favorite"
       mode="outline"
     />
     <Button
-      type="button"
       caption="Show Details"
     />
   </footer>
