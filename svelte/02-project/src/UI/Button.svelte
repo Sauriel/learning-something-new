@@ -93,6 +93,7 @@
   <button
     type={type}
     class={mode}
+    on:click
   >
     {caption}
   </button>

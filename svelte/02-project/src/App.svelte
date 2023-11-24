@@ -10,9 +10,10 @@
       title: 'Coding Bootcamp',
       subtitle: 'Learn to code in 2 hours',
       description: 'In this meetup, we will have some exports teach you how to code!',
-      imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/First_Caffe_Nero_Sutton_Surrey_London.JPG/320px-First_Caffe_Nero_Sutton_Surrey_London.JPG',
+      imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/First_Caffe_Nero_Sutton_Surrey_London.JPG/800px-First_Caffe_Nero_Sutton_Surrey_London.JPG',
       address: '27th Nerd Road, 32523 New York',
-      contactEmail: 'code@test.com'
+      contactEmail: 'code@test.com',
+      isFavorite: false
     },
     {
       id: 'm2',
@@ -21,7 +22,8 @@
       description: 'We will simply swim some rounds!',
       imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e1/Olympic_Swimming_Pool_-_Fast_Lane.JPG',
       address: '27th Nerd Road, 32523 New York',
-      contactEmail: 'seim@test.com'
+      contactEmail: 'seim@test.com',
+      isFavorite: false
     }
   ];
 
@@ -40,10 +42,21 @@
       description,
       imageUrl,
       address,
-      contactEmail: email
+      contactEmail: email,
+      isFavorite: false
     };
 
     meetups = [ newMeetup, ...meetups ];
+  }
+
+  function toggleFavorite(event) {
+    const id = event.detail;
+    const updatedMeetup ={...meetups.find(m => m.id === id)};
+    updatedMeetup.isFavorite = !updatedMeetup.isFavorite;
+    const meetupIndex = meetups.findIndex(m => m.id === id);
+    const updatedMeetups = [...meetups];
+    updatedMeetups[meetupIndex] = updatedMeetup;
+    meetups = updatedMeetups;
   }
 </script>
 
@@ -111,5 +124,8 @@
       caption="Save"
     />
   </form>
-  <MeetupGrid {meetups} />
+  <MeetupGrid
+    {meetups}
+    on:togglefavorite={toggleFavorite}
+  />
 </main>
