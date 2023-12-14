@@ -3,6 +3,7 @@
   export let href = null;
   export let mode = null;
   export let color = null;
+  export let disabled = false;
 </script>
 
 <style>
@@ -94,6 +95,7 @@
     type={type}
     class="{mode} {color}"
     on:click
+    {disabled}
   >
     <slot />
   </button>
