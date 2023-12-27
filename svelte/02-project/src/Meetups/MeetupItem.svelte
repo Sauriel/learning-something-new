@@ -13,10 +13,28 @@
   export let email;
   export let isFav;
 
+  let isLoading = false;
+
   const dispatch = createEventDispatcher();
 
   function togglefavorite() {
-    meetupStore.toggleFavorite(id);
+    isLoading = true;
+    fetch(`https://svelte-course-45a1e-default-rtdb.europe-west1.firebasedatabase.app/meetups/${id}.json`, {
+      method: 'PATCH',
+      body: JSON.stringify({ isFavorite: !isFav }),
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then(res => {
+      if (!res.ok) {
+        throw new Error('An error occured, please try again!');
+      }
+      meetupStore.toggleFavorite(id);
+      isLoading = false;
+    })
+    .catch(err => {
+      console.error(err);
+      isLoading = false;
+    });
   }
 </script>
 
@@ -103,13 +121,17 @@
     >
       Edit
     </Button>
-    <Button
-      mode="outline"
-      color={isFav ? null : 'success'}
-      on:click={togglefavorite}
-    >
-      {isFav ? 'Unfavorite' : 'Favorite'}
-    </Button>
+    {#if isLoading}
+      <span>Changing...</span>
+    {:else}
+      <Button
+        mode="outline"
+        color={isFav ? null : 'success'}
+        on:click={togglefavorite}
+      >
+        {isFav ? 'Unfavorite' : 'Favorite'}
+      </Button>
+    {/if}
     <Button on:click={() => dispatch('showdetails', id)}>Show Details</Button>
   </footer>
 </article>
