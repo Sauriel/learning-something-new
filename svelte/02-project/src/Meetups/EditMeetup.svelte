@@ -1,9 +1,12 @@
 <script>
+  import meetupStore from './meetups-store';
   import { createEventDispatcher } from 'svelte';
   import TextInput from '../UI/TextInput.svelte';
   import Button from '../UI/Button.svelte';
   import Modal from '../UI/Modal.svelte';
   import { isEmpty, isValidEmail } from '../helpers/validation';
+
+  export let id = null;
 
   let title = '';
   let subtitle = '';
@@ -11,6 +14,19 @@
   let imageUrl = '';
   let address = '';
   let email = '';
+
+  if (id) {
+    const unsubscribe = meetupStore.subscribe(items => {
+      const selectedMeetup = items.find(item => item.id === id);
+      title = selectedMeetup.title;
+      subtitle = selectedMeetup.subtitle;
+      description = selectedMeetup.description;
+      imageUrl = selectedMeetup.imageUrl;
+      address = selectedMeetup.address;
+      email = selectedMeetup.contactEmail;
+    });
+    unsubscribe();
+  }
 
   const dispatch = createEventDispatcher();
 
@@ -23,18 +39,30 @@
   $: formIsValid = titleValid && subtitleValid && descriptionValid && imageUrlValid && addressValid && emailValid;
 
   function submitForm() {
-    dispatch('save', {
-      title,
-      subtitle,
-      description,
-      imageUrl,
-      address,
-      email,
-    });
+    const meetupData = {
+      title: title,
+      subtitle: subtitle,
+      description: description,
+      imageUrl: imageUrl,
+      address: address,
+      contactEmail: email
+    };
+
+    if (id) {
+      meetupStore.updateMeetup(id, meetupData);
+    } else {
+      meetupStore.addMeetup(meetupData);
+    }
+    dispatch('save');
   }
 
   function cancel() {
     dispatch('cancel');
+  }
+
+  function deleteMeetup() {
+    meetupStore.removeMeetup(id);
+    dispatch('save');
   }
 </script>
 
@@ -105,5 +133,8 @@
   <div slot="footer">
     <Button mode="outline" on:click={cancel}>Cancel</Button>
     <Button on:click={submitForm} disabled={!formIsValid}>Save</Button>
+    {#if id}
+      <Button on:click={deleteMeetup}>Delete</Button>
+    {/if}
   </div>
 </Modal>
