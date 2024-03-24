@@ -1,7 +1,5 @@
 <script>
   import "../app.css";
 </script>
-
-<p>I am a layout</p>
-
+<h1>LAYOUT</h1>
 <slot />
