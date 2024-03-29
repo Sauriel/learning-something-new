@@ -1,1 +1,1 @@
-# learning-somethin-new
+# learning-something-new

@@ -1,0 +1,11 @@
+.DS_Store
+node_modules
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+svelte-course-45a1e-firebase-adminsdk-ktj0k-875b69a0f8.json
